@@ -38,7 +38,7 @@ async function main() {
 // Execute the main function and handle potential errors
 main()
   .catch((e) => {
-    console.error('❌ Error during seeding:', e);
+    console.error(' Error during seeding:', e);
     process.exit(1);
   })
   .finally(async () => {
