@@ -2,10 +2,13 @@
   "name": "e-commerce-backend",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
+     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
       "db:migrate": "dotenv -e .env -- prisma migrate dev"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
