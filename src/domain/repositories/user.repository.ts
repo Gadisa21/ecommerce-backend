@@ -1,9 +1,9 @@
 
 import { Prisma, PrismaClient, User } from '@prisma/client';
+import prisma from '../../utils/prisma';
 
 type UserCreateInput = Prisma.UserCreateInput;
 
-const prisma = new PrismaClient();
 
 export class UserRepository {
   async findByEmail(email: string): Promise<User | null> {
