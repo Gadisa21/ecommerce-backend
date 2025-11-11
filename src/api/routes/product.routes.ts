@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { Role } from '@prisma/client';
-import { createProduct, getProducts, updateProduct,getProductDetails } from '../controllers/product.controller';
+import { createProduct, getProducts, updateProduct,getProductDetails,deleteProduct } from '../controllers/product.controller';
 import { validate } from '../middlewares/validation.middleware';
 import { createProductSchema ,updateProductSchema,getProductsSchema,getProductByIdSchema} from '../../domain/dtos/product.dto';
 import { authenticate, authorize } from '../middlewares/auth.middleware';
@@ -32,4 +32,13 @@ router.put(
 router.get('/', validate(getProductsSchema), getProducts);
 
 router.get('/:id', validate(getProductByIdSchema), getProductDetails);
+
+router.delete(
+  '/:id',
+  authenticate,
+  authorize(Role.ADMIN),
+  validate(getProductByIdSchema),
+  deleteProduct
+);
+
 export default router;

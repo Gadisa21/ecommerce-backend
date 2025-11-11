@@ -57,4 +57,10 @@ export class ProductRepository {
     return { products, totalCount };
   }
 
+  async deleteById(id: string): Promise<Product> {
+    return prisma.product.delete({
+      where: { id },
+    });
+  }
+
 }

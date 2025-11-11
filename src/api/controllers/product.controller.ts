@@ -4,6 +4,7 @@ import { ProductRepository } from '../../domain/repositories/product.repository'
 import { UpdateProductUseCase } from '../../domain/usecases/product/update-product.usecase';
 import { GetProductsUseCase } from '../../domain/usecases/product/get-products.usecase';
 import { GetProductDetailsUseCase } from '../../domain/usecases/product/get-product-details.usecase';
+import { DeleteProductUseCase } from '../../domain/usecases/product/delete-product.usecase';
 import { AuthRequest } from '../middlewares/auth.middleware'; // Import  custom request type(the one with user info added)
 
 // Instantiate repository and use case
@@ -12,6 +13,7 @@ const createProductUseCase = new CreateProductUseCase(productRepository);
 const updateProductUseCase = new UpdateProductUseCase(productRepository);
 const getProductsUseCase= new GetProductsUseCase(productRepository);
 const getProductDetailsUseCase=new GetProductDetailsUseCase(productRepository);
+const deleteProductUseCase=new DeleteProductUseCase(productRepository);
 
 export const createProduct = async (req: AuthRequest, res: Response) => {
   try {
@@ -130,3 +132,32 @@ export const getProductDetails = async (req: Request, res: Response) => {
   }
 };
 
+export const deleteProduct = async (req: AuthRequest, res: Response) => {
+  try {
+    const { id } = req.params;
+    await deleteProductUseCase.execute(id);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Product deleted successfully',
+      object: null,
+      errors: null,
+    });
+  } catch (error) {
+    if ((error as Error).message === 'Product not found') {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found',
+        object: null,
+        errors: [(error as Error).message],
+      });
+    }
+
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to delete product',
+      errors: [(error as Error).message],
+    });
+  }
+};
