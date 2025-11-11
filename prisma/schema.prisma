@@ -1,0 +1,51 @@
+
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  username  String    @unique
+  email     String    @unique
+  password  String
+  role      Role      @default(USER) 
+
+  // Relations
+  products  Product[]
+  orders    Order[]
+}
+
+model Product {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  stock       Int
+  category    String
+
+  // Foreign key relation to the User who created the product
+  user        User   @relation(fields: [userId], references: [id])
+  userId      String
+}
+model Order {
+  id         String   @id @default(uuid())
+  totalPrice Float
+  status     String   @default("PENDING") // Orders are pending by default
+  products   Json     // Storing order items as JSON to lock in details at purchase time
+
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
