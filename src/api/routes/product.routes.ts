@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { Role } from '@prisma/client';
-import { createProduct } from '../controllers/product.controller';
+import { createProduct, getProducts, updateProduct } from '../controllers/product.controller';
 import { validate } from '../middlewares/validation.middleware';
-import { createProductSchema } from '../../domain/dtos/product.dto';
+import { createProductSchema ,updateProductSchema,getProductsSchema} from '../../domain/dtos/product.dto';
 import { authenticate, authorize } from '../middlewares/auth.middleware';
 
 const router = Router();
@@ -21,4 +21,13 @@ router.post(
   createProduct
 );
 
+router.put(
+  '/:id',
+  authenticate,
+  authorize(Role.ADMIN),
+  validate(updateProductSchema),
+  updateProduct
+);
+
+router.get('/', validate(getProductsSchema), getProducts);
 export default router;

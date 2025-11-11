@@ -16,10 +16,12 @@ model User {
   password  String
   role      Role      @default(USER) 
 
-  // Relations
+ 
   products  Product[]
   orders    Order[]
-}
+ createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+} 
 
 model Product {
   id          String @id @default(uuid())
@@ -29,9 +31,10 @@ model Product {
   stock       Int
   category    String
 
-  // Foreign key relation to the User who created the product
   user        User   @relation(fields: [userId], references: [id])
   userId      String
+    createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 model Order {
   id         String   @id @default(uuid())
@@ -41,6 +44,8 @@ model Order {
 
   user       User     @relation(fields: [userId], references: [id])
   userId     String
+   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
