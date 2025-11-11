@@ -3,6 +3,7 @@ import { CreateProductUseCase } from '../../domain/usecases/product/create-produ
 import { ProductRepository } from '../../domain/repositories/product.repository';
 import { UpdateProductUseCase } from '../../domain/usecases/product/update-product.usecase';
 import { GetProductsUseCase } from '../../domain/usecases/product/get-products.usecase';
+import { GetProductDetailsUseCase } from '../../domain/usecases/product/get-product-details.usecase';
 import { AuthRequest } from '../middlewares/auth.middleware'; // Import  custom request type(the one with user info added)
 
 // Instantiate repository and use case
@@ -10,6 +11,7 @@ const productRepository = new ProductRepository();
 const createProductUseCase = new CreateProductUseCase(productRepository);
 const updateProductUseCase = new UpdateProductUseCase(productRepository);
 const getProductsUseCase= new GetProductsUseCase(productRepository);
+const getProductDetailsUseCase=new GetProductDetailsUseCase(productRepository);
 
 export const createProduct = async (req: AuthRequest, res: Response) => {
   try {
@@ -97,3 +99,34 @@ export const getProducts = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getProductDetails = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const product = await getProductDetailsUseCase.execute(id);
+
+    return res.status(200).json({
+      success: true,
+      message: 'Product details retrieved successfully',
+      object: product,
+      errors: null,
+    });
+  } catch (error) {
+    if ((error as Error).message === 'Product not found') {
+      return res.status(404).json({
+        success: false,
+        message: 'Product not found',
+        object: null,
+        errors: [(error as Error).message],
+      });
+    }
+
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve product details',
+      errors: [(error as Error).message],
+    });
+  }
+};
+

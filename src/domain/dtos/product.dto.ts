@@ -75,3 +75,9 @@ export const getProductsSchema = z.object({
     search: z.string().optional(),
   }),
 });
+
+export const getProductByIdSchema = z.object({
+  params: z.object({
+    id: z.string().uuid('A valid product ID (UUID) is required in the URL.'),
+  }),
+});
