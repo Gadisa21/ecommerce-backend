@@ -78,8 +78,9 @@ export const getProducts = async (req: Request, res: Response) => {
   
     const page = req.query.page ? Number(req.query.page) : 1;
     const pageSize = req.query.pageSize ? Number(req.query.pageSize) : 10;
+     const search = req.query.search as string | undefined;
 
-    const paginatedResult = await getProductsUseCase.execute(page, pageSize);
+    const paginatedResult = await getProductsUseCase.execute(page, pageSize, search);
 
     return res.status(200).json({
       success: true,

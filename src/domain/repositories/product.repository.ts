@@ -26,18 +26,31 @@ export class ProductRepository {
 
    async findAllPaginated(
     page: number,
-    pageSize: number
+    pageSize: number,
+    searchTerm?: string
   ): Promise<{ products: Product[]; totalCount: number }> {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
 
+    const whereClause: Prisma.ProductWhereInput = searchTerm
+      ? {
+          name: {
+            contains: searchTerm, 
+            mode: 'insensitive', 
+          },
+        }
+      : {};
+
     
     const [totalCount, products] = await prisma.$transaction([
-      prisma.product.count(),
+      prisma.product.count({
+        where: whereClause,
+      }),
       prisma.product.findMany({
         skip: skip,
         take: take,
-        orderBy: { createdAt: 'desc' } as any,
+        where: whereClause,
+        orderBy: { createdAt: 'desc' },
       }),
     ]);
 

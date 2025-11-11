@@ -15,10 +15,11 @@ export class GetProductsUseCase {
 
   async execute(
     page: number,
-    pageSize: number
+    pageSize: number,
+      searchTerm?: string 
   ): Promise<PaginatedProductResponse> {
     const { products, totalCount } =
-      await this.productRepository.findAllPaginated(page, pageSize);
+      await this.productRepository.findAllPaginated(page, pageSize,  searchTerm);
 
     const totalPages = Math.ceil(totalCount / pageSize);
 

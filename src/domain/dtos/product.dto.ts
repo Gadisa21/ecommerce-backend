@@ -71,5 +71,7 @@ export const getProductsSchema = z.object({
       .int()
       .positive()
       .optional(),
+    
+    search: z.string().optional(),
   }),
 });
