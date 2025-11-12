@@ -18,6 +18,16 @@ The API is built with a clean, scalable, and maintainable architecture, separati
 
 ---
 
+## Security Features
+
+
+-   **Password Hashing**: User passwords are never stored in plaintext. They are securely hashed using the industry-standard `bcrypt` algorithm.
+-   **JWT Authentication**: Access to protected routes is managed via short-lived, signed JSON Web Tokens, preventing unauthorized access.
+-   **Role-Based Authorization**: Endpoints are protected based on user roles (e.g., only an `ADMIN` can create a product), ensuring users can only perform actions they are permitted to.
+-   **Global Rate Limiting**: To protect the API from brute-force attacks and denial-of-service attempts, a global rate limit is applied. By default, each IP address is limited to **100 requests per 15 minutes**. Exceeding this limit will result in a `429 Too Many Requests` error.
+
+---
+
 ## Tech Stack
 
 -   **Runtime**: Node.js

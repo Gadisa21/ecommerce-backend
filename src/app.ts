@@ -3,10 +3,29 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express, { Request, Response } from 'express';
+import rateLimit from 'express-rate-limit'; 
 import allRoutes from './api/routes/index'; 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// --- RATE LIMITER MIDDLEWARE CONFIGURATION ---
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, 
+  max: 100, 
+  standardHeaders: true, 
+  legacyHeaders: false, 
+  
+  //  message to send when the rate limit is exceeded
+  message: {
+    success: false,
+    message: 'Too many requests created from this IP, please try again after 15 minutes',
+    errors: ['Too many requests.'],
+  },
+});
+
+// Apply the rate limiting middleware to all requests
+app.use(limiter);
 
 // Middleware to parse incoming JSON requests
 app.use(express.json());
