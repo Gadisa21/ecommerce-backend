@@ -1,6 +1,6 @@
 # E-Commerce REST API
 
-This project is a  REST API for an e-commerce platform. It provides core functionalities including user authentication, product catalog management for admins, and a complete order placement and history viewing system for users.
+This project is a  REST API for an e-commerce platform. It provides core functionalities, including user authentication, product catalog management for admins, and a complete order placement and history viewing system for users.
 
 The API is built with a clean, scalable, and maintainable architecture, separating concerns into distinct layers for routing, controllers, business logic (use cases), and data access (repositories).
 
